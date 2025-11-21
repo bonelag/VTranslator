@@ -11,7 +11,7 @@ VTranslator is a Windows desktop assistant that instantly converts on-screen tex
 - **Optional audio output**: Pair translated text with Edge or Windows TTS to hear lines read aloud.
 
 ## Getting started
-
+---> Extract DataPack.7z First
 1. Run `venv.bat` one time to prepare the bundled Python environment.
 2. Launch the app with `run.bat`; the overlay controller and status window appear.
 3. Adjust hotkeys, OCR settings, and translation providers from the Settings UI, then capture text in any application using the assigned shortcut.
