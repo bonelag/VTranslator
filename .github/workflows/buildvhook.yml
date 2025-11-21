@@ -14,8 +14,8 @@ jobs:
       - uses: GuillaumeFalourd/setup-windows10-sdk-action@v2
         with:
           sdk-version: 26100
-      - run: python src/scripts/build_vhook.py build x86 0 xp
-      - run: python src/scripts/packvhook.py
+      - run: python scripts/build_vhook.py build x86 0 xp
+      - run: python scripts/packvhook.py
 
       - uses: actions/upload-artifact@v4
         with:
@@ -49,8 +49,8 @@ jobs:
   #         arch:         ${{ matrix.qtarch }}
   #         dir:          ${{ runner.temp }}
   #         setup-python: true
-  #     - run: python src/scripts/build_vhook.py plugin ${{ matrix.bits }}
-  #     - run: python src/scripts/packvhook.py
+  #     - run: python scripts/build_vhook.py plugin ${{ matrix.bits }}
+  #     - run: python scripts/packvhook.py
 
   #     - uses: actions/upload-artifact@v4
   #       with:
@@ -76,7 +76,7 @@ jobs:
       - uses: GuillaumeFalourd/setup-windows10-sdk-action@v2
         with:
           sdk-version: 26100
-      - run: python src/scripts/build_vhook.py build x64 0 win7
+      - run: python scripts/build_vhook.py build x64 0 win7
 
       - uses: actions/upload-artifact@v4
         with:
@@ -91,7 +91,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
             path: src/cpp/VHook/build
-      - run: python src/scripts/build_vhook.py merge
+      - run: python scripts/build_vhook.py merge
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: VHook
