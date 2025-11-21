@@ -23,6 +23,19 @@ def fuckmove(src, tgt):
             shutil.copytree(src, tgt, dirs_exist_ok=True)
 
 
+def copytree_if_exists(src, dst, **kwargs):
+    if not os.path.exists(src):
+        print(f"[build_vtranslator] skip missing {src}")
+        return False
+    shutil.copytree(src, dst, **kwargs)
+    return True
+
+
+def remove_if_exists(path):
+    if os.path.exists(path):
+        os.remove(path)
+
+
 pluginDirs = ["DLL32", "DLL64"]
 
 localeEmulatorFile = "https://github.com/xupefei/Locale-Emulator/releases/download/v2.5.0.1/Locale.Emulator.2.5.0.1.zip"
@@ -327,15 +340,15 @@ if __name__ == "__main__":
 
         os.chdir(rootDir)
         if target == "winxp":
-            shutil.copytree("../build/cpp_x86_winxp", "NativeImpl/builds", dirs_exist_ok=True)
-            shutil.copytree("../build/cpp_x64_win7", "NativeImpl/builds", dirs_exist_ok=True)
-            shutil.copytree(
+            copytree_if_exists("../build/cpp_x86_winxp", "NativeImpl/builds", dirs_exist_ok=True)
+            copytree_if_exists("../build/cpp_x64_win7", "NativeImpl/builds", dirs_exist_ok=True)
+            copytree_if_exists(
                 "../build/hook_x86_winxp", "files/VHook", dirs_exist_ok=True
             )
-            shutil.copytree(
+            copytree_if_exists(
                 "../build/hook_x64_win7", "files/VHook", dirs_exist_ok=True
             )
-            os.remove("files/VHook/VHost64.dll")
+            remove_if_exists("files/VHook/VHost64.dll")
             os.makedirs("files/DLL32", exist_ok=True)
             shutil.copy("NativeImpl/builds/_x86_winxp/shareddllproxy32.exe", "files")
             shutil.copy("NativeImpl/builds/_x64_win7/shareddllproxy64.exe", "files")
@@ -344,14 +357,14 @@ if __name__ == "__main__":
                 f"python {os.path.join(rootthisfiledir,'collectall.py')} {arch} {target}"
             )
             exit()
-        shutil.copytree(
+        copytree_if_exists(
             f"../build/hook_x64_{target}", "files/VHook", dirs_exist_ok=True
         )
-        shutil.copytree(
+        copytree_if_exists(
             f"../build/hook_x86_{target}", "files/VHook", dirs_exist_ok=True
         )
-        shutil.copytree(f"../build/cpp_x64_{target}", "NativeImpl/builds", dirs_exist_ok=True)
-        shutil.copytree(f"../build/cpp_x86_{target}", "NativeImpl/builds", dirs_exist_ok=True)
+        copytree_if_exists(f"../build/cpp_x64_{target}", "NativeImpl/builds", dirs_exist_ok=True)
+        copytree_if_exists(f"../build/cpp_x86_{target}", "NativeImpl/builds", dirs_exist_ok=True)
         os.makedirs("files/DLL32", exist_ok=True)
         shutil.copy(f"NativeImpl/builds/_x86_{target}/shareddllproxy32.exe", "files")
         os.system(f"robocopy NativeImpl/builds/_x86_{target} files/DLL32 *.dll")
@@ -360,9 +373,9 @@ if __name__ == "__main__":
         os.system(f"robocopy NativeImpl/builds/_x64_{target} files/DLL64 *.dll")
 
         if arch == "x86":
-            os.remove(f"files/VHook/VHost64.dll")
+            remove_if_exists(f"files/VHook/VHost64.dll")
         else:
-            os.remove("files/VHook/VHost32.dll")
+            remove_if_exists("files/VHook/VHost32.dll")
         os.system(
             f"python {os.path.join(rootthisfiledir,'collectall.py')} {arch} {target}"
         )

@@ -4,7 +4,7 @@ import os, shutil, sys
 rootDir = os.path.dirname(__file__)
 if not rootDir:
     rootDir = os.path.abspath(".")
-rootDir=os.path.abspath(os.path.join(rootDir,'../../src/NativeImpl/VHook'))
+rootDir=os.path.abspath(os.path.join(rootDir,'../../NativeImpl/VHook'))
 
 os.chdir(rootDir)
 os.chdir('./builds')

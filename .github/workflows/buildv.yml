@@ -29,12 +29,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: hook_${{matrix.arch}}_${{matrix.target}}
-          path: src/NativeImpl/VHook/builds/Release
+          path: NativeImpl/VHook/builds/Release
 
       - uses: actions/upload-artifact@v4
         with:
           name: cpp_${{matrix.arch}}_${{matrix.target}}
-          path: src/NativeImpl/builds
+          path: NativeImpl/builds
           
   pyrt:
     runs-on: windows-latest
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pyrt_${{matrix.arch}}_${{matrix.target}}
-          path: src/pyrt
+          path: pyrt
   
   merge:
     runs-on: windows-latest
@@ -81,12 +81,12 @@ jobs:
 
       - uses: actions/attest-build-provenance@v2.2.0
         with:
-            subject-path: src/build/VTranslator_${{ matrix.arch }}_${{ matrix.target }}.zip
+            subject-path: build/VTranslator_${{ matrix.arch }}_${{ matrix.target }}.zip
 
       - uses: actions/upload-artifact@v4
         with:
           name: VTranslator_${{ matrix.arch }}_${{ matrix.target }}
-          path: src/build/VTranslator_${{ matrix.arch }}_${{ matrix.target }}.zip
+          path: build/VTranslator_${{ matrix.arch }}_${{ matrix.target }}.zip
 
   loadversion:
     if: ${{inputs.createrelease}}

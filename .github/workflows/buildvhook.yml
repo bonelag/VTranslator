@@ -81,7 +81,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.bits}}
-          path: src/cpp/VHook/builds
+          path: cpp/VHook/builds
   
   build:
     runs-on: windows-latest
@@ -90,11 +90,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-            path: src/cpp/VHook/build
+            path: cpp/VHook/build
       - run: python scripts/build_vhook.py merge
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: VHook
-          files: src/cpp/VHook/builds/*
+          files: cpp/VHook/builds/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
