@@ -1,0 +1,21 @@
+﻿
+set(VERSION_MAJOR 4)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
+set(VERSION_REVISION 0)
+set(V_VERSION "{${VERSION_MAJOR},${VERSION_MINOR},${VERSION_PATCH},${VERSION_REVISION}}")
+add_library(VERSION_DEF ${CMAKE_CURRENT_LIST_DIR}/version_def.cpp)
+target_compile_definitions(VERSION_DEF PRIVATE
+    V_VERSION_=${V_VERSION})
+include(${CMAKE_CURRENT_LIST_DIR}/version/generate_product_version.cmake)
+
+generate_product_version(
+	versioninfo
+   NAME "VTranslator"
+   COMPANY_COPYRIGHT "BoneLag (C) 2025"
+   ICON ${PATH_TO_APPLICATION_ICON}
+   VERSION_MAJOR ${VERSION_MAJOR}
+   VERSION_MINOR ${VERSION_MINOR}
+   VERSION_PATCH ${VERSION_PATCH}
+   VERSION_REVISION ${VERSION_REVISION}
+)

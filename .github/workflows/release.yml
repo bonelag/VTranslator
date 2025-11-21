@@ -1,0 +1,11 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  buildv:
+    uses: ./.github/workflows/buildv.yml
+    with: 
+      createrelease: true
+  

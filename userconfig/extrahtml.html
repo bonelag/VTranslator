@@ -1,0 +1,26 @@
+<div id="example_hello"></div>
+<style>
+    body::before {
+        background-color: #000000;
+        opacity: 0.5;
+        background-size: 100% auto;
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background-color: rgb(44, 44, 44);
+            color: white;
+        }
+    }
+</style>

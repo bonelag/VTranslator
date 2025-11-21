@@ -1,0 +1,3 @@
+One winter day game software is born. Main character Michiru is born as a program with its own will inside it. From the fans in the game board he gets to know that he's the creator of the game Michiruki Michiru who died in a traffic incident without telling anyone what kind of game he was making. So he decides that it will be a game everyone can enjoy, so he provides an opportunity for players to finish the software according to their wishes. Every time girl comes to the scene it's possible to control her next actions.
+
+[From [url=https://vndbreview.blogspot.com/2019/02/vn-of-month-june-2001-no-reality.html]vndbreview[/url]]

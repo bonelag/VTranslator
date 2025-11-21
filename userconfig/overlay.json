@@ -1,0 +1,14 @@
+{
+    "enable": 1,
+    "text_color": "white",
+    "stroke_color": "rgba(0, 0, 0, 255)",
+    "stroke_width": 1.0,
+    "min_font_size": 8.0,
+    "max_font_size": 30.0,
+    "font_family": "Segoe UI",
+    "background_color": "rgba(0, 0, 0, 1.00)",
+    "box_expansion": 2.0,
+    "timeout_ms": 20000,
+    "horizontal_padding": 0,
+    "vertical_padding": 2.0
+}
