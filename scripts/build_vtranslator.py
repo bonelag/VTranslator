@@ -350,8 +350,22 @@ if __name__ == "__main__":
             )
             remove_if_exists("files/VHook/VHost64.dll")
             os.makedirs("files/DLL32", exist_ok=True)
-            shutil.copy("NativeImpl/builds/_x86_winxp/shareddllproxy32.exe", "files")
-            shutil.copy("NativeImpl/builds/_x64_win7/shareddllproxy64.exe", "files")
+            src32 = "NativeImpl/builds/_x86_winxp/shareddllproxy32.exe"
+            src64 = "NativeImpl/builds/_x64_win7/shareddllproxy64.exe"
+            if not os.path.exists(src32) or not os.path.exists(src64):
+                missing = []
+                if not os.path.exists(src32):
+                    missing.append(src32)
+                if not os.path.exists(src64):
+                    missing.append(src64)
+                raise FileNotFoundError(
+                    f"Missing native build artifacts: {missing}.\n"
+                    "Please run the native build step to produce these files, e.g. '\n"
+                    "  python scripts/build_vtranslator.py cpp x86 winxp\n"
+                    "and/or build the appropriate ../build/... outputs so they can be copied into NativeImpl/builds"
+                )
+            shutil.copy(src32, "files")
+            shutil.copy(src64, "files")
             os.system(f"robocopy NativeImpl/builds/_x86_winxp files/DLL32 *.dll")
             os.system(
                 f"python {os.path.join(rootthisfiledir,'collectall.py')} {arch} {target}"
@@ -366,10 +380,26 @@ if __name__ == "__main__":
         copytree_if_exists(f"../build/cpp_x64_{target}", "NativeImpl/builds", dirs_exist_ok=True)
         copytree_if_exists(f"../build/cpp_x86_{target}", "NativeImpl/builds", dirs_exist_ok=True)
         os.makedirs("files/DLL32", exist_ok=True)
-        shutil.copy(f"NativeImpl/builds/_x86_{target}/shareddllproxy32.exe", "files")
+        src32 = f"NativeImpl/builds/_x86_{target}/shareddllproxy32.exe"
+        if not os.path.exists(src32):
+            raise FileNotFoundError(
+                f"Missing native artifact: {src32}.\n"
+                "Run the native build step to produce it, for example:\n"
+                "  python scripts/build_vtranslator.py cpp x86 {target}\n"
+                "or ensure ../build/cpp_x86_{target} was produced and copied into NativeImpl/builds"
+            )
+        shutil.copy(src32, "files")
         os.system(f"robocopy NativeImpl/builds/_x86_{target} files/DLL32 *.dll")
         os.makedirs("files/DLL64", exist_ok=True)
-        shutil.copy(f"NativeImpl/builds/_x64_{target}/shareddllproxy64.exe", "files")
+        src64 = f"NativeImpl/builds/_x64_{target}/shareddllproxy64.exe"
+        if not os.path.exists(src64):
+            raise FileNotFoundError(
+                f"Missing native artifact: {src64}.\n"
+                "Run the native build step to produce it, for example:\n"
+                "  python scripts/build_vtranslator.py cpp x64 {target}\n"
+                "or ensure ../build/cpp_x64_{target} was produced and copied into NativeImpl/builds"
+            )
+        shutil.copy(src64, "files")
         os.system(f"robocopy NativeImpl/builds/_x64_{target} files/DLL64 *.dll")
 
         if arch == "x86":
