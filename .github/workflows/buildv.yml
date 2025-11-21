@@ -7,58 +7,30 @@ on:
         type: boolean
         default: false
         required: false 
+
 jobs:
   cpps:
     runs-on: windows-latest
     strategy:
       matrix:
         include:
-          - arch: x86
-            target: win7  
           - arch: x64
-            target: win7  
-          - arch: x64
-            target: win10  
-          - arch: x86
-            target: win10  
-          - arch: x86
-            target: winxp
+            target: win10   # 🟦 ONLY WIN10 x64
     permissions:
       id-token: write
       attestations: write
       contents: write
     steps:
       - uses: actions/checkout@v4
-      # - uses: microsoft/setup-msbuild@v2
-      - if: matrix.target == 'winxp'
-        run: |
-            Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
-            $InstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
-            $componentsToAdd = @(
-              "Microsoft.VisualStudio.Component.WinXP"
-            )
-            [string]$workloadArgs = $componentsToAdd | ForEach-Object {" --add " +  $_}
-            $Arguments = ('/c', "vs_installer.exe", 'modify', '--installPath', "`"$InstallPath`"",$workloadArgs, '--quiet', '--norestart', '--nocache')
-            $process = Start-Process -FilePath cmd.exe -ArgumentList $Arguments -Wait -PassThru -WindowStyle Hidden
-            if ($process.ExitCode -eq 0)
-            {
-                Write-Host "components have been successfully added"
-                Get-ChildItem C:\ProgramData\Microsoft\VisualStudio\Packages\Microsoft.Windows.XPSupport.*
-            }
-            else
-            {
-                Write-Host "components were not installed"
-                exit 1
-            }
-      # - uses: GuillaumeFalourd/setup-windows10-sdk-action@v2
-      #   with:
-      #     sdk-version: 26100
+
       - run: python scripts/build_vtranslator.py hook ${{matrix.arch}} ${{matrix.target}}
       - run: python scripts/build_vtranslator.py cpp ${{ matrix.arch }} ${{matrix.target}}
+
       - uses: actions/upload-artifact@v4
         with:
           name: hook_${{matrix.arch}}_${{matrix.target}}
           path: src/NativeImpl/VHook/builds/Release
+
       - uses: actions/upload-artifact@v4
         with:
           name: cpp_${{matrix.arch}}_${{matrix.target}}
@@ -69,15 +41,9 @@ jobs:
     strategy:
       matrix:
         include:  
-          - arch: x86
-            target: win7
-            pythonversion: '3.7.9' 
-          - arch: x64
-            target: win7
-            pythonversion: '3.7.9' 
           - arch: x64
             target: win10
-            pythonversion: '3.12.10'  
+            pythonversion: '3.12.10'   # 🟦 ONLY WIN10 x64
     steps:
       - uses: actions/checkout@v4
 
@@ -103,23 +69,20 @@ jobs:
     strategy:
       matrix:
         include:
-          - arch: x86
-            target: win7 
           - arch: x64
-            target: win7 
-          - arch: x64
-            target: win10 
-          - arch: x86
-            target: winxp
+            target: win10   # 🟦 ONLY WIN10 x64
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
             path: build
+
       - run:  python scripts/build_vtranslator.py merge ${{ matrix.arch }} ${{matrix.target}}
+
       - uses: actions/attest-build-provenance@v2.2.0
         with:
             subject-path: src/build/VTranslator_${{ matrix.arch }}_${{ matrix.target }}.zip
+
       - uses: actions/upload-artifact@v4
         with:
           name: VTranslator_${{ matrix.arch }}_${{ matrix.target }}
@@ -143,13 +106,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
             path: build
+
       - uses: softprops/action-gh-release@v2.2.2
         with:
           tag_name: ${{ needs.loadversion.outputs.version }}
           files: |
-            build/VTranslator_x86_winxp/VTranslator_x86_winxp.zip
-            build/VTranslator_x86_win7/VTranslator_x86_win7.zip
-            build/VTranslator_x64_win7/VTranslator_x64_win7.zip
-            build/VTranslator_x64_win10/VTranslator_x64_win10.zip
+            build/VTranslator_x64_win10/VTranslator_x64_win10.zip  # 🟦 ONLY THIS
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
